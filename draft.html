@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Ultimate Draft Manager - Phase de Draft</title>
+    <title>House of Laura : Le Choc des Légendes - Draft</title>
     <style>
         body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
         .card-container { display: flex; justify-content: center; gap: 20px; margin: 30px 0; flex-wrap: wrap; }
@@ -16,7 +16,7 @@
     </style>
 </head>
 <body>
-    <h2>Phase de Draft</h2>
+    <h2>Phase de Draft - House of Laura FC</h2>
     <p id="info-step" style="color: #38bdf8;"></p>
     
     <div class="card-container" id="choices"></div>
@@ -25,34 +25,6 @@
     <div class="squad-grid" id="squad-preview"></div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const mode = urlParams.get('mode') || 'actuels';
-
-        const actuelsPool = [
-            { name: "Kylian Mbappé", pos: "BU", rating: 91 },
-            { name: "Erling Haaland", pos: "BU", rating: 91 },
-            { name: "Vinicius Jr", pos: "AG", rating: 89 },
-            { name: "Kevin De Bruyne", pos: "MOC", rating: 91 },
-            { name: "Jude Bellingham", pos: "MC", rating: 86 },
-            { name: "Rodri", pos: "MC", rating: 89 },
-            { name: "Virgil van Dijk", pos: "DC", rating: 89 },
-            { name: "William Saliba", pos: "DC", rating: 87 },
-            { name: "Theo Hernandez", pos: "DG", rating: 85 },
-            { name: "Achraf Hakimi", pos: "DD", rating: 84 },
-            { name: "Thibaut Courtois", pos: "GB", rating: 90 }
-        ];
-
-        const legendesPool = [
-            { name: "Pelé", pos: "BU", rating: 98, legend: true },
-            { name: "Zinedine Zidane", pos: "MOC", rating: 96, legend: true },
-            { name: "Ronaldinho", pos: "AG", rating: 95, legend: true },
-            { name: "Paolo Maldini", pos: "DC", rating: 94, legend: true },
-            { name: "Lev Yashin", pos: "GB", rating: 94, legend: true },
-            { name: "Diego Maradona", pos: "MOC", rating: 97, legend: true },
-            { name: "Ronaldo Nazario", pos: "BU", rating: 96, legend: true },
-            { name: "Johan Cruyff", pos: "AT", rating: 96, legend: true }
-        ];
-
         const lauraPool = [
             { name: "Druly", pos: "BU", rating: 91 },
             { name: "Benito Artemis", pos: "MC", rating: 90 },
@@ -72,21 +44,12 @@
 
         const lauraGoal = { name: "Laura", pos: "GB", rating: 97, legend: true };
 
-        let squad = [];
-        let pool = [];
-
-        if (mode === 'laura') {
-            squad.push(lauraGoal); // Laura gardienne obligatoire à 97
-            pool = lauraPool;
-        } else if (mode === 'legendes') {
-            pool = legendesPool;
-        } else {
-            pool = actuelsPool;
-        }
-
-        localStorage.setItem('userSquad', JSON.stringify(squad));
+        let squad = [lauraGoal]; // Laura gardienne obligatoire dès le début
+        let pool = [...lauraPool];
         let draftCount = squad.length;
         const targetCount = 5;
+
+        localStorage.setItem('userTeamName', 'House of Laura FC');
 
         function loadStep() {
             if (draftCount >= targetCount) {
@@ -94,10 +57,10 @@
                 return;
             }
 
-            document.getElementById('info-step').innerText = `Choix du joueur ${draftCount + 1} / ${targetCount} (Choisis parmi 2 joueurs)`;
+            document.getElementById('info-step').innerText = `Choix du joueur ${draftCount + 1} / ${targetCount} (Sélectionne parmi 2 membres de House of Laura)`;
             
             // Sélection aléatoire parmi 2 joueurs
-            let shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 2);
+            let shuffled = pool.sort(() => 0.5 - Math.random()).slice(0, 2);
             
             let container = document.getElementById('choices');
             container.innerHTML = '';
