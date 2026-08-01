@@ -2,39 +2,27 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Ultimate Draft Manager - Accueil</title>
+    <title>House of Laura : Le Choc des Légendes - Accueil</title>
     <style>
-        body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding-top: 60px; }
-        .btn { background: #3b82f6; color: white; padding: 14px 24px; font-size: 1.1rem; border: none; border-radius: 8px; cursor: pointer; margin: 10px; text-decoration: none; display: inline-block; font-weight: bold; width: 320px; }
-        .btn-legend { background: linear-gradient(135deg, #eab308, #ca8a04); }
-        .btn-laura { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-        input { padding: 12px; width: 320px; font-size: 1rem; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: white; text-align: center; margin-bottom: 20px; }
-        .mode-box { background: #1e293b; border: 2px solid #334155; border-radius: 12px; padding: 30px; width: 450px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding-top: 80px; }
+        .btn { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 15px 30px; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; margin: 15px; text-decoration: none; display: inline-block; font-weight: bold; width: 320px; transition: 0.2s; text-transform: uppercase; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .mode-box { background: #1e293b; border: 2px solid #334155; border-radius: 12px; padding: 35px; width: 450px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h1 { color: #facc15; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <h1>Ultimate Draft Manager</h1>
-    <p style="color: #94a3b8; margin-bottom: 25px;">Choisis ton mode de création d'équipe</p>
+    <h1>House of Laura : Le Choc des Légendes</h1>
+    <p style="color: #94a3b8; margin-bottom: 30px;">Affronte l'élite du football mondial (Joueurs Actuels & Légendes) avec ton équipe de House of Laura !</p>
     
     <div class="mode-box">
-        <div style="margin-bottom: 15px;">
-            <input type="text" id="team-name" placeholder="Nom de ton équipe">
-        </div>
-        <div>
-            <a href="draft.html?mode=actuels" class="btn" onclick="saveTeam('actuels')">Joueurs Actuels</a><br>
-            <a href="draft.html?mode=legendes" class="btn btn-legend" onclick="saveTeam('legendes')">Joueurs Légendes</a><br>
-            <a href="draft.html?mode=laura" class="btn btn-laura" onclick="saveTeam('laura')">House of Laura FC</a>
-        </div>
+        <p style="margin-bottom: 20px; font-weight: bold; color: #38bdf8;">Prépare ta draft et mène Laura et son équipe vers la gloire.</p>
+        <a href="draft.html" class="btn" onclick="initLauraTeam()">Lancer la Draft House of Laura</a>
     </div>
 
     <script>
-        function saveTeam(mode) {
-            let name = document.getElementById('team-name').value.trim();
-            if(mode === 'laura') {
-                localStorage.setItem('userTeamName', 'House of Laura FC');
-            } else {
-                localStorage.setItem('userTeamName', name ? name : (mode === 'legendes' ? 'Team Légendes' : 'Team Actuels'));
-            }
+        function initLauraTeam() {
+            localStorage.setItem('userTeamName', 'House of Laura FC');
         }
     </script>
 </body>
