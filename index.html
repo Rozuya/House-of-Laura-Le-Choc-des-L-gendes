@@ -4,32 +4,34 @@
     <meta charset="UTF-8">
     <title>Ultimate Draft Manager - Accueil</title>
     <style>
-        body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding-top: 100px; }
-        .btn { background: #3b82f6; color: white; padding: 15px 30px; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; margin: 10px; text-decoration: none; display: inline-block; font-weight: bold; }
+        body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding-top: 80px; }
+        .btn { background: #3b82f6; color: white; padding: 15px 30px; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; margin: 15px; text-decoration: none; display: inline-block; font-weight: bold; }
         .btn-alt { background: #8b5cf6; }
-        input { padding: 12px; width: 300px; font-size: 1rem; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: white; text-align: center; margin-bottom: 20px; }
+        input { padding: 12px; width: 300px; font-size: 1rem; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: white; text-align: center; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
+        .mode-box { background: #1e293b; border: 2px solid #334155; border-radius: 12px; padding: 30px; width: 450px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
     <h1>Ultimate Draft Manager</h1>
-    <p style="color: #94a3b8; margin-bottom: 20px;">Choisis ton mode de jeu pour commencer</p>
+    <p style="color: #94a3b8; margin-bottom: 25px;">Choisis ton mode de jeu pour commencer</p>
     
-    <div>
-        <input type="text" id="team-name" placeholder="Nom de ton équipe (FUT Classique)">
-    </div>
-    
-    <div>
-        <a href="draft.html?mode=normal" class="btn" onclick="saveTeamName()">Commencer Draft (FUT Classique)</a>
-        <a href="draft.html?mode=laura" class="btn btn-alt">Draft Version House of Laura</a>
+    <div class="mode-box">
+        <div style="margin-bottom: 20px;">
+            <input type="text" id="team-name" placeholder="Nom de ton équipe (Mode Classique)">
+        </div>
+        <div>
+            <a href="draft.html?mode=normal" class="btn" onclick="saveTeamName('normal')">Mode Classique (FUT & Légendes)</a><br>
+            <a href="draft.html?mode=laura" class="btn btn-alt" onclick="saveTeamName('laura')">Mode House of Laura FC</a>
+        </div>
     </div>
 
     <script>
-        function saveTeamName() {
+        function saveTeamName(mode) {
             let name = document.getElementById('team-name').value.trim();
-            if(name) {
-                localStorage.setItem('userTeamName', name);
+            if(mode === 'laura') {
+                localStorage.setItem('userTeamName', 'House of Laura FC');
             } else {
-                localStorage.setItem('userTeamName', 'Mon Équipe FUT');
+                localStorage.setItem('userTeamName', name ? name : 'Mon Équipe Classique');
             }
         }
     </script>
