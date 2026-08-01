@@ -6,16 +6,17 @@
     <style>
         body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
         .score { font-size: 2.5rem; font-weight: bold; color: #facc15; margin: 20px 0; }
-        .commentary { background: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 8px; font-style: italic; color: #38bdf8; font-size: 1.2rem; min-height: 80px; margin: 20px auto; width: 600px; }
-        .btn { background: #3b82f6; color: white; padding: 12px 25px; font-size: 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .commentary { background: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 8px; font-style: italic; color: #38bdf8; font-size: 1.2rem; min-height: 80px; margin: 20px auto; width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .btn { background: #3b82f6; color: white; padding: 12px 25px; font-size: 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        .btn:hover { background: #2563eb; }
     </style>
 </head>
 <body>
     <h2 id="match-title">Match en cours</h2>
     <div class="score" id="score-box">0 - 0</div>
-    <p id="time-box" style="font-weight: bold; color: #eab308;">0' min</p>
+    <p id="time-box" style="font-weight: bold; color: #eab308; font-size: 1.2rem;">0' min</p>
 
-    <div class="commentary" id="comm-box">Coup d'envoi de la rencontre !</div>
+    <div class="commentary" id="comm-box">Coup d'envoi de la rencontre ! Le match commence sous les acclamations.</div>
 
     <button class="btn" id="next-btn" onclick="nextAction()">Suivre l'action</button>
 
@@ -35,14 +36,14 @@
         function nextAction() {
             minute += 15;
             if (minute === 45) {
-                alert("C'est la mi-temps ! Reprenez le match pour la seconde période.");
+                alert("C'est la mi-temps ! Soufflez un coup avant d'attaquer la seconde période.");
             }
 
             if (minute >= 90) {
                 minute = 90;
                 document.getElementById('comm-box').innerText = `🏁 Fin du match ! Score final : ${homeScore} - ${awayScore}`;
                 document.getElementById('next-btn').innerText = "Voir le Classement";
-                document.getElementById('next-btn').onclick = () => { window.location.href = 'standings.html'; };
+                document.getElementById('next-btn').onclick = () => { window.location.href = 'classement.html'; };
                 return;
             }
 
@@ -50,12 +51,12 @@
             if (roll < avgRating - 25) {
                 homeScore++;
                 let scorer = squad[Math.floor(Math.random() * squad.length)]?.name || "Buteur";
-                document.getElementById('comm-box').innerText = `🔥 BUT pour ${teamName} ! Magnifique action de ${scorer} à la ${minute}e minute !`;
+                document.getElementById('comm-box').innerText = `🔥 BUT pour ${teamName} ! Magnifique action conclue par ${scorer} à la ${minute}e minute !`;
             } else if (roll > 75) {
                 awayScore++;
-                document.getElementById('comm-box').innerText = `⚡ But de l'adversaire (${opponent}) suite à une attaque rapide à la ${minute}e minute...`;
+                document.getElementById('comm-box').innerText = `⚡ But de l'adversaire (${opponent}) suite à une faille défensive à la ${minute}e minute...`;
             } else {
-                document.getElementById('comm-box').innerText = `⏱️ ${minute}' : Grosse bataille au milieu de terrain, le score ne bouge pas.`;
+                document.getElementById('comm-box').innerText = `⏱️ ${minute}' : Grosse bataille tactique au milieu de terrain, le score ne bouge pas.`;
             }
 
             document.getElementById('score-box').innerText = `${homeScore} - ${awayScore}`;
