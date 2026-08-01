@@ -4,26 +4,30 @@
     <meta charset="UTF-8">
     <title>House of Laura : Le Choc des Légendes - Match</title>
     <style>
-        body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
-        .score { font-size: 2.5rem; font-weight: bold; color: #facc15; margin: 20px 0; }
-        .commentary { background: #1e293b; border: 1px solid #334155; padding: 25px; border-radius: 8px; font-style: italic; color: #38bdf8; font-size: 1.2rem; min-height: 80px; margin: 20px auto; width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .btn { background: #8b5cf6; color: white; padding: 12px 25px; font-size: 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
-        .btn:hover { background: #7c3aed; }
+        body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding: 40px 20px; }
+        .score { font-size: 3rem; font-weight: bold; color: #facc15; margin: 20px 0; letter-spacing: 3px; }
+        .commentary { background: #1e293b; border: 1px solid #334155; padding: 30px; border-radius: 12px; font-style: italic; color: #38bdf8; font-size: 1.3rem; min-height: 90px; max-width: 650px; margin: 30px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .btn { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 14px 28px; font-size: 1.1rem; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; display: none; margin-top: 20px; text-decoration: none; }
+        .btn:hover { opacity: 0.9; }
+        .live-badge { background: #ef4444; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; display: inline-block; margin-bottom: 15px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
-    <h2 id="match-title">Match en cours</h2>
+    <div class="live-badge">🔴 MATCH EN DIRECT</div>
+    <h2 id="match-title" style="margin-top: 5px;">Match en cours</h2>
+    
     <div class="score" id="score-box">0 - 0</div>
-    <p id="time-box" style="font-weight: bold; color: #eab308; font-size: 1.2rem;">0' min</p>
+    <p id="time-box" style="font-weight: bold; color: #eab308; font-size: 1.4rem;">0' min</p>
 
-    <div class="commentary" id="comm-box">Coup d'envoi ! House of Laura affronte l'équipe All-Stars Actuels & Légendes !</div>
+    <div class="commentary" id="comm-box">Coup d'envoi ! House of Laura entre sur la pelouse face aux légendes du football mondial...</div>
 
-    <button class="btn" id="next-btn" onclick="nextAction()">Suivre l'action</button>
+    <a href="classement.html" class="btn" id="next-btn">Voir le Classement</a>
 
     <script>
         let teamName = localStorage.getItem('userTeamName') || 'House of Laura FC';
         let squad = JSON.parse(localStorage.getItem('userSquad')) || [];
-        let opponent = "All-Stars Actuels & Légendes (Mbappé, Pelé, Zidane...)";
+        let opponent = "All-Stars Actuels & Légendes";
         
         document.getElementById('match-title').innerText = `${teamName} vs ${opponent}`;
 
@@ -33,38 +37,48 @@
 
         let avgRating = squad.length > 0 ? squad.reduce((acc, p) => acc + p.rating, 0) / squad.length : 85;
 
-        function nextAction() {
-            minute += 15;
-            if (minute === 45) {
-                alert("C'est la mi-temps ! Laura verrouille sa cage, place à la seconde période.");
-            }
-
-            if (minute >= 90) {
+        // Lancement de la simulation automatique toutes les 2 secondes (2000 millisecondes)
+        let matchInterval = setInterval(() => {
+            minute += 10;
+            
+            if (minute === 50) {
+                document.getElementById('comm-box').innerText = `⏱️ C'est la mi-temps ! Laura verrouille sa cage avec brio. Reprise de la seconde période.`;
+            } else if (minute >= 90) {
                 minute = 90;
-                document.getElementById('comm-box').innerText = `🏁 Fin du match historique ! Score final : ${homeScore} - ${awayScore}`;
-                document.getElementById('next-btn').innerText = "Voir le Classement";
-                document.getElementById('next-btn').onclick = () => { window.location.href = 'classement.html'; };
-                return;
-            }
-
-            let roll = Math.random() * 100;
-            if (roll < avgRating - 25) {
-                homeScore++;
-                let scorer = squad[Math.floor(Math.random() * squad.length)]?.name || "Buteur";
-                document.getElementById('comm-box').innerText = `🔥 BUT magique pour ${teamName} ! Inscrit par ${scorer} à la ${minute}e minute face aux légendes !`;
-            } else if (roll > 75) {
-                awayScore++;
-                document.getElementById('comm-box').innerText = `⚡ But adverse des stars mondiales à la ${minute}e minute malgré la parade de Laura...`;
+                clearInterval(matchInterval);
+                document.getElementById('comm-box').innerText = `🏁 Coup de sifflet final ! Fin du match historique : Score final ${homeScore} - ${awayScore}`;
+                document.getElementById('time-box').innerText = `90' min (Terminé)`;
+                document.getElementById('next-btn').style.display = 'inline-block';
             } else {
-                document.getElementById('comm-box').innerText = `⏱️ ${minute}' : Grosse domination, Laura réalise un arrêt spectaculaire dans sa surface !`;
+                let roll = Math.random() * 100;
+                if (roll < (avgRating - 20)) {
+                    homeScore++;
+                    let scorer = squad[Math.floor(Math.random() * squad.length)]?.name || "Buteur";
+                    document.getElementById('comm-box').innerText = `🔥 INCROYABLE BUT pour ${teamName} ! Magnifique action conclue par ${scorer} à la ${minute}e minute !`;
+                } else if (roll > 80) {
+                    awayScore++;
+                    document.getElementById('comm-box').innerText = `⚡ But de l'adversaire (${opponent}) à la ${minute}e minute malgré la parade de Laura...`;
+                } else {
+                    const actions = [
+                        `⏱️ ${minute}' : Grosse bataille au milieu de terrain, le jeu est très serré.`,
+                        `⏱️ ${minute}' : Frappe lointaine adverse... claquette magistrale de Laura en corner !`,
+                        `⏱️ ${minute}' : Belle combinaison offensive de House of Laura, la défense adverse vacille.`,
+                        `⏱️ ${minute}' : Intervention propre de la défense, le score reste figé.`
+                    ];
+                    let randomAction = actions[Math.floor(Math.random() * actions.length)];
+                    document.getElementById('comm-box').innerText = randomAction;
+                }
             }
 
             document.getElementById('score-box').innerText = `${homeScore} - ${awayScore}`;
-            document.getElementById('time-box').innerText = `${minute}' min`;
+            if (minute < 90) {
+                document.getElementById('time-box').innerText = `${minute}' min`;
+            }
             
+            // Sauvegarde en temps réel pour le classement
             localStorage.setItem('lastHomeScore', homeScore);
             localStorage.setItem('lastAwayScore', awayScore);
-        }
+        }, 2200);
     </script>
 </body>
 </html>
