@@ -8,7 +8,7 @@
         .card-container { display: flex; justify-content: center; gap: 20px; margin: 30px 0; flex-wrap: wrap; }
         .player-card { background: #1e293b; border: 3px solid #eab308; border-radius: 12px; width: 200px; padding: 20px; cursor: pointer; transition: 0.2s; }
         .player-card:hover { transform: scale(1.05); }
-        .player-card.legend { border-color: #cbd5e1; background: linear-gradient(135deg, #334155, #0f172a); }
+        .player-card.legend { border-color: #cbd5e1; background: linear-gradient(135deg, #334155, #0f172a); box-shadow: 0 0 15px rgba(203, 213, 225, 0.4); }
         .rating { font-size: 2rem; font-weight: bold; color: #eab308; }
         .legend .rating { color: #f8fafc; }
         .squad-grid { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
@@ -26,9 +26,9 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const mode = urlParams.get('mode') || 'normal';
+        const mode = urlParams.get('mode') || 'actuels';
 
-        const normalPool = [
+        const actuelsPool = [
             { name: "Kylian Mbappé", pos: "BU", rating: 91 },
             { name: "Erling Haaland", pos: "BU", rating: 91 },
             { name: "Vinicius Jr", pos: "AG", rating: 89 },
@@ -39,39 +39,54 @@
             { name: "William Saliba", pos: "DC", rating: 87 },
             { name: "Theo Hernandez", pos: "DG", rating: 85 },
             { name: "Achraf Hakimi", pos: "DD", rating: 84 },
-            { name: "Thibaut Courtois", pos: "GB", rating: 90 },
-            { name: "Ronaldinho (Légende)", pos: "AG", rating: 95, legend: true },
-            { name: "Zinedine Zidane (Légende)", pos: "MOC", rating: 96, legend: true },
-            { name: "Pelé (Légende)", pos: "BU", rating: 98, legend: true }
+            { name: "Thibaut Courtois", pos: "GB", rating: 90 }
+        ];
+
+        const legendesPool = [
+            { name: "Pelé", pos: "BU", rating: 98, legend: true },
+            { name: "Zinedine Zidane", pos: "MOC", rating: 96, legend: true },
+            { name: "Ronaldinho", pos: "AG", rating: 95, legend: true },
+            { name: "Paolo Maldini", pos: "DC", rating: 94, legend: true },
+            { name: "Lev Yashin", pos: "GB", rating: 94, legend: true },
+            { name: "Diego Maradona", pos: "MOC", rating: 97, legend: true },
+            { name: "Ronaldo Nazario", pos: "BU", rating: 96, legend: true },
+            { name: "Johan Cruyff", pos: "AT", rating: 96, legend: true }
         ];
 
         const lauraPool = [
-            { name: "Vespera", pos: "GB", rating: 97, legend: true },
-            { name: "Ninistre", pos: "DC", rating: 89 },
-            { name: "Rozuya", pos: "DC", rating: 88 },
-            { name: "Zewonka", pos: "DD", rating: 86 },
-            { name: "K9", pos: "DG", rating: 86 },
+            { name: "Druly", pos: "BU", rating: 91 },
             { name: "Benito Artemis", pos: "MC", rating: 90 },
-            { name: "Omass", pos: "MC", rating: 88 },
+            { name: "Sephirot", pos: "MOC", rating: 90 },
+            { name: "Ninistre", pos: "DC", rating: 89 },
             { name: "Tony", pos: "MOC", rating: 89 },
+            { name: "Rozuya", pos: "DC", rating: 88 },
+            { name: "Omass", pos: "MC", rating: 88 },
+            { name: "Dante", pos: "BU", rating: 88 },
             { name: "Charly", pos: "AG", rating: 87 },
             { name: "Camille", pos: "AD", rating: 87 },
-            { name: "Druly", pos: "BU", rating: 91 },
+            { name: "Zewonka", pos: "DD", rating: 86 },
+            { name: "K9", pos: "DG", rating: 86 },
             { name: "Cocol", pos: "MC", rating: 85 },
-            { name: "Bryan", pos: "DC", rating: 85 },
-            { name: "Dante", pos: "BU", rating: 88 },
-            { name: "Sephirot", pos: "MOC", rating: 90 }
+            { name: "Bryan", pos: "DC", rating: 85 }
         ];
 
-        let pool = mode === 'laura' ? lauraPool : normalPool;
+        const lauraGoal = { name: "Laura", pos: "GB", rating: 97, legend: true };
+
         let squad = [];
-        localStorage.setItem('userSquad', JSON.stringify(squad));
-        let draftCount = 0;
-        const targetCount = 5;
+        let pool = [];
 
         if (mode === 'laura') {
-            localStorage.setItem('userTeamName', 'House of Laura FC');
+            squad.push(lauraGoal); // Laura gardienne obligatoire à 97
+            pool = lauraPool;
+        } else if (mode === 'legendes') {
+            pool = legendesPool;
+        } else {
+            pool = actuelsPool;
         }
+
+        localStorage.setItem('userSquad', JSON.stringify(squad));
+        let draftCount = squad.length;
+        const targetCount = 5;
 
         function loadStep() {
             if (draftCount >= targetCount) {
@@ -79,8 +94,10 @@
                 return;
             }
 
-            document.getElementById('info-step').innerText = `Choix du joueur ${draftCount + 1} / ${targetCount}`;
-            let shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 3);
+            document.getElementById('info-step').innerText = `Choix du joueur ${draftCount + 1} / ${targetCount} (Choisis parmi 2 joueurs)`;
+            
+            // Sélection aléatoire parmi 2 joueurs
+            let shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 2);
             
             let container = document.getElementById('choices');
             container.innerHTML = '';
@@ -92,6 +109,7 @@
                     squad.push(p);
                     localStorage.setItem('userSquad', JSON.stringify(squad));
                     draftCount++;
+                    pool = pool.filter(item => item.name !== p.name);
                     loadStep();
                 };
                 container.appendChild(card);
